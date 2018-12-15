@@ -75,7 +75,7 @@ public class BinaryVsLinear {
 		
 		if(index == sick.size()) // base case
 		{
-			return -1337; //code will never get here. If it does, then I can tell.
+			return -9999; //error
 		}
 		
 
@@ -101,7 +101,7 @@ public class BinaryVsLinear {
 	{
 		if (start>end)
 		{
-			return -1337; //false value
+			return -9999; //error
 		}
 
 		int mid = start + (end-start)/2;
