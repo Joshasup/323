@@ -9,7 +9,7 @@ int main()
 
 	cout << " Enter n: ";
 	cin >> n;
-	float result = sqrtf(n);
+	float result = sqrtfunction(n);
 	cout << result;
 
 }
@@ -17,7 +17,7 @@ int main()
 float sqrtfunction(float n) 
 {
 	float result = sqrt(n);
-	return result;
+	return ceil(result);
 }
 
 
