@@ -1,0 +1,87 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+public class MSS {
+	//DONE
+	public static void main (String [] args)
+	{
+		Random rng = new Random();
+		Scanner keyboard = new Scanner(System.in);
+		
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		
+		System.out.println("Enter size of array.");
+		int user = keyboard.nextInt(); //size of array
+		
+		//Initialize array with random
+		for(int i = 0; i < user; i++)
+		{
+			a.add(rng.nextInt(201)-100);
+		}
+		System.out.println(a);
+		System.out.println("MSSn: " + MSSn(a));
+		System.out.println("MSSnlogn: " + MSSnlogn(a, 0, user - 1));
+	}
+	
+	/**
+	 * calculates the Maximum SubSequence Sum with runtime n
+	 * @return int - the max sum
+	 */
+	public static int MSSn(ArrayList<Integer> a)
+	{
+		int maxSum = 0;
+		int tempSum = 0;
+		for(int i = 0; i < a.size(); i++)
+		{
+			tempSum += a.get(i); //keep adding across
+			if(maxSum < tempSum) 
+				maxSum = tempSum;
+			if(tempSum < 0) //checks for negs
+				tempSum = 0;
+		}
+		return maxSum;
+	}
+	/**
+	 * calculates the Maximum SubSequence Sum with runtime nlogn
+	 */
+	public static int MSSnlogn(ArrayList<Integer> a, int start, int end)
+	{
+		if(start == end)//(a.size() == 0)
+			return a.get(start);
+		int mid = (start + end)/2;
+		int tempMax = Math.max(MSSnlogn(a, start, mid),MSSnlogn(a, mid+1, end));
+		return Math.max(tempMax, subArraySum(a, start, mid, end));
+		//int tempMax = Math.max(MSSnlogn(a, start, mid),MSSnlogn(a, mid+1, end));
+		//return tempMax; //subArraySum(a, start, mid, end);
+	}
+
+	public static int subArraySum(ArrayList<Integer> a, int start, int mid, int end)
+	{
+		// Include elements on left of mid.
+        int sum = 0; //temp sum
+        int leftSum = 0;
+        for (int i = mid; i >= start; i--)
+        //go backwards so that can add last numbers into rightSum
+        //regardless of how low the beginning numbers are
+        {
+            sum = sum + a.get(i);
+            if (sum > leftSum)
+            	leftSum = sum;
+        }
+ 
+        // Include elements on right of mid
+        sum = 0; //use same temp sum
+        int rightSum = 0;
+        for (int i = mid + 1; i <= end; i++)
+        {
+            sum = sum + a.get(i);
+            if (sum > rightSum)
+            	rightSum = sum;
+        }
+ 
+        // Return sum of elements on left
+        // and right of mid
+        return leftSum + rightSum;
+	}
+//	*/
+}
