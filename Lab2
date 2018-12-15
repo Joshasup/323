@@ -1,0 +1,114 @@
+#include "stdafx.h"
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+	float n;
+
+	cout << " Enter n: ";
+	cin >> n;
+	float result = sqrtf(n);
+	cout << result;
+
+}
+
+float sqrtfunction(float n) 
+{
+	float result = sqrt(n);
+	return result;
+}
+
+
+
+// Lab2_Q2.cpp : 
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <math.h>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+float binaryPositionFinder (vector<int> vec){
+
+	int l, r, mid;
+
+	l = vec.size() - 1;
+	r = round((l) / 2);
+	mid = r;
+	while (r > l) {
+
+	}
+	return 0;
+}
+float binaryPosition(vector<int> vec) {
+	int i = 0;
+	
+	int n = vec.size();
+	int target = 2;
+	int next = 3;
+	int mid, current;
+	mid = round((i + n) / 2);
+	while (i < n) {
+		
+		current = vec.at(mid);
+		if (current == 0 && target == 2) {
+			target = 1;
+			next = vec.at(mid + 1);
+		}
+		else {
+			target = 0;
+			next = vec.at(mid - 1);
+		}
+		if (current == 0 && target != next) {
+			
+			mid = mid + 1;
+			next = vec.at(mid + 1);
+			cout << "\n print" << next << target;
+		}
+		else if (current == 1 && target != next) {
+			
+			mid = mid - 1;
+			next = vec.at(mid + 1);
+			cout << "\n print" << next << target;
+		}
+		else if (current == 0) {
+			cout << "printfdas";
+			return mid;
+		}
+		else if (current == 1) {
+			cout << "printfdas";
+			return mid - 1;
+		}
+	}
+	return 0;
+}
+
+
+int main()
+{
+	float arrayLength;
+	float k;
+	
+
+	cout << "Enter the length of the array: ";
+	cin >> arrayLength;
+
+	cout << "Enter K, the number of 0's: ";
+	cin >> k;
+
+	
+	std::vector<int> vec;
+	
+	vec.resize(arrayLength);
+	vec.assign(0, k);
+	int j = 0;
+	for (int i = k; i < arrayLength; i++) {
+		vec.push_back(1);
+	}
+	float result = binaryPosition(vec);
+	cout << result;
+}
