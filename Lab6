@@ -1,0 +1,137 @@
+
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Heaps
+{
+
+
+
+	public static void main(String[] args)
+	{
+		System.out.println("Please enter the size of the array: ");
+		Scanner scan = new Scanner(System.in);
+		int n = 0;
+		//Validating user input
+		boolean validate = true;
+		String error = "Oops! Thats not a valid input, please try again: ";
+		while(validate)
+		{
+			if(!scan.hasNextInt())
+			{
+				System.out.println(error);
+				scan.next();
+				continue;
+			}else
+			{
+				n = scan.nextInt();
+				if(n < 0)
+				{
+					System.out.println(error);
+					continue;
+				}
+				else
+					validate = false;
+			}
+		}
+		//Creating a new array and filling it with random integers -10000 to 10000
+		int[] a = new int[n];
+		for(int i = 0; i < n; i++)
+		{
+			int r = (int)(Math.random()*(20000 + 1) - 10000);
+			a[i] = r;
+		}
+		//Taking the average time to run both sorts
+		long heaptimestart, heaptimeend, heaptime, selectionsortstart, selectionsortend,selectiontime;
+		long heaptimetotal = 0;
+		long selectiontimetotal = 0;
+		for(int l = 0; l < 100; l++)
+		{
+			heaptimestart = System.nanoTime();
+			heap_sort(a);
+			heaptimeend = System.nanoTime();
+			heaptime = heaptimeend - heaptimestart;
+			heaptimetotal = heaptimetotal + heaptime;
+			selectionsortstart = System.nanoTime();
+		        selection_sort(a);
+			selectionsortend = System.nanoTime();
+			selectiontime = selectionsortend - selectionsortstart;
+			selectiontimetotal = selectiontimetotal + selectiontime;
+		}
+
+		//Testing heap sort
+		int[] b = new int[10];
+		for(int i = 0; i < 10; i++)
+		{
+			int r = (int)(Math.random()*(200 + 1) - 100);
+			b[i] = r;
+		}
+		heap_sort(b);
+		System.out.println(Arrays.toString(b));
+
+		//Printing the results of timing the sorts
+		System.out.println("The average run time for heap sort is " + heaptimetotal/100 + " nanoseconds.");
+		System.out.println("The average run time for selection sort is " + selectiontimetotal/100 + " nanoseconds.");
+
+	}
+	//Function to build a max heap array
+	public static int[] build_maxHeap(int a[])
+	{
+		int heapSize = a.length;
+		for(int i = heapSize/2 - 1; i >= 0; i--) //a.length/2 - 1 is the index of the parent node and we can start from there
+		{
+			max_heapify(a, heapSize, i);
+		}
+		return a;
+	}
+        //Function to max heapify the array to build a max heap array
+	public static void max_heapify(int a[],int s, int i)
+	{
+		int l = 2*i + 1; //left child
+		int r = 2*i + 2; //right child
+		int largest = i;
+		if(l < s && a[l] > a[largest])
+			largest = l;
+		if(r < s && a[r] > a[largest])
+			largest = r;
+		if(largest != i)
+		{
+			swap(a, i, largest);
+			max_heapify(a, s, largest);
+		}	
+		
+	}
+	//Function to sort an array using a max heap array
+	public static void heap_sort(int a[])
+	{
+		a = build_maxHeap(a); //Making the array into a max heap
+		int heapSize = a.length - 1;
+		for(int i = heapSize; i >= 0; i--)
+		{
+			swap(a, i, 0); //Putting the root as the last element in the array
+			max_heapify(a, i, 0); //Re-building the maxheap with one less element
+		}
+	}
+	//Function to sort an array using selection sort
+	public static void selection_sort(int a[])
+	{
+		int min;
+		for(int i = 0; i < a.length - 1; i++)
+		{
+			min = i;
+			for(int j = i+1; j < a.length; j++)
+			{
+				if(a[j] < a[min])
+					min = j;
+			}
+			swap(a, i, min);
+		}
+	}
+	//Function to swap two elements in an array
+	public static void swap(int a[], int b, int c)
+	{
+		int temp = a[b];
+		a[b] = a[c];
+		a[c] = temp;
+	}
+}
