@@ -1,0 +1,124 @@
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Collections;
+import java.util.ArrayList;
+
+public class BinaryVsLinear {
+	//10,000 is too large
+	public static void main(String[] args) 
+	{
+		Random rng = new Random();
+		Scanner keyboard = new Scanner(System.in);
+		
+		ArrayList<Integer>sick = new ArrayList<Integer>();
+		final int ITERATIONS = 500;
+		
+		//System.out.println("Enter size of array.");
+		//int size = keyboard.nextInt(); //size of array
+		int size = 100; //size of array
+		
+		//Initialize array with random
+		for(int i=0; i<size;i++)
+		{
+			sick.add(rng.nextInt(2001)-1000);
+		}
+		
+		int key = sick.get(rng.nextInt(size)); //make key from random index of array
+		//int key = 5000; //for part B where key does not exist
+		//when key is 5000, n cannot be 10,000
+		//System.out.println("This is key: "+key);
+		//Linear work
+		long linearTotal = 0;
+		for(int i = 0; i < ITERATIONS; i++)
+		{
+			long linearStart = System.nanoTime();
+			int match = LinearSearch(key,sick,0);
+			long linearEnd = System.nanoTime();
+			linearTotal = linearTotal + (linearEnd-linearStart);
+		}
+		
+		System.out.println("Linear Serach:");
+		//System.out.println("The value " +key +" was found at index: " +match); //remember return 0 value
+		System.out.println("Average time taken after " + ITERATIONS + " iterations is: " +linearTotal/ITERATIONS+ " nanoseconds.");
+		long estimatedLinear = (linearTotal / ITERATIONS) / size;
+		System.out.println("Estimated time taken for size 1000 is: "  + estimatedLinear*1000 + " nanoseconds.\n");
+		
+		//Binary work
+		Collections.sort(sick);
+		long binaryTotal = 0;
+		for(int i = 0; i < ITERATIONS; i++)
+		{
+			//key = sick.get(rng.nextInt(size));
+			long binaryStart = System.nanoTime();
+			int match = BinarySearch(key,sick,0,sick.size()-1);
+			long binaryEnd = System.nanoTime();
+			binaryTotal = binaryTotal + (binaryEnd - binaryStart);
+		}
+		
+		//System.out.println(sick);
+		System.out.println("Binary Search:");
+	//	System.out.println("The value " +key +" was found at index: " +match2); //remember return 0 value
+		System.out.println("Average time taken after " + ITERATIONS + " iterations is: " +binaryTotal/ITERATIONS+ " nanoseconds.");
+		long estimatedBinary = (binaryTotal / ITERATIONS) / size;
+		System.out.println("Estimated time taken for size 1000 is: " + estimatedBinary*1000 + " nanoseconds.");
+	} //end main
+
+	/**
+	 * searches an array linearly
+	 * @param key - the int to find
+	 * @param sick - array to search
+	 * @param index - the index to refer to
+	 * @return the found int
+	 */
+	public static int LinearSearch(int key, ArrayList<Integer> sick,int index)
+	{
+		
+		if(index == sick.size()) // base case
+		{
+			return -1337; //code will never get here. If it does, then I can tell.
+		}
+		
+
+		if (key==sick.get(index))
+		{
+			return index;
+		}
+
+		index++;
+		return LinearSearch(key, sick,index);
+
+	}//end linear search
+	
+	/**
+	 * finds number through binary serach
+	 * @param key - the number to find
+	 * @param sick - the array to search
+	 * @param start - the starting index
+	 * @param end - the last index
+	 * @return - the number found
+	 */
+	public static int BinarySearch(int key, ArrayList<Integer> sick,int start, int end)
+	{
+		if (start>end)
+		{
+			return -1337; //false value
+		}
+
+		int mid = start + (end-start)/2;
+		if (key< sick.get(mid)) //if key is lower than middle
+		{
+			return BinarySearch(key,sick,start,mid-1); //look at left area
+		}
+
+		else if (key > sick.get(mid))// if key is more than middle
+		{
+			return BinarySearch(key,sick,mid+1,end); //look at right area
+		}
+
+		else //key == sick.get(mid)
+		{
+			return mid; //return value if key=middle
+		}
+	} //end Binary Search
+
+}//class
