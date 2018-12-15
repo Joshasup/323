@@ -40,7 +40,7 @@ float binaryPositionFinder (vector<int> vec){
 	r = round((l) / 2);
 	mid = r;
 	while (r > l) {
-
+		return mid;
 	}
 	return 0;
 }
