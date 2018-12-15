@@ -1,0 +1,154 @@
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+public class QuickSortvsInsertionSort {
+	//do paper work
+	//numbers seem very low/ off
+	//clean up comments
+	public static void main (String[]args)
+	{
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		ArrayList<Integer> b = new ArrayList<Integer>();
+		Random rng = new Random();
+		Scanner in = new Scanner(System.in);
+		final int REPS = 100;
+		//System.out.println("Enter size of array.");
+		//int n = in.nextInt();
+		int n = 10000;
+		for(int i=0; i<n; i++)
+		{
+			a.add(rng.nextInt(14001) - 7000);
+		}
+		//System.out.println(a);
+		long quickSum = 0;
+		for(int i = 0; i < REPS; i++)
+		{
+			a = makeArray(n); //remake array so ensure quality
+			long quickStart = System.nanoTime();
+			quickSort(a, 0, a.size() - 1); //I think a.size() - 1 = n
+			long quickEnd = System.nanoTime();
+			quickSum = quickSum + (quickEnd - quickStart);
+		}
+		System.out.println("Average time of quickSort after " 
+		+ REPS + " reps is: " + quickSum/REPS + " nanoseconds.");
+		double quickLines = quickSum/REPS;
+		quickLines = quickLines / Math.pow(n, 2);
+		double second = Math.pow(10, 9);
+		System.out.println("You can run " + second/quickLines + " of lines in 1 second.\n");
+		
+		long insertSum = 0;
+		for(int i = 0; i < REPS; i++)
+		{
+			a = makeArray(n); //best case insertion is n so it will be faster
+			long insertStart = System.nanoTime();
+			insertionSort(a);
+			long insertEnd = System.nanoTime();
+			insertSum = insertSum + (insertEnd - insertStart);
+		}
+		System.out.println("Average time of insertionSort after " 
+		+ REPS + " reps is: " + insertSum/REPS + " nanoseconds.");
+		double insertLines = insertSum/REPS;
+		insertLines = insertLines / Math.pow(n, 2);
+		// USE SAME SECOND // double second = Math.pow(10, 9);
+		System.out.println("You can run " + second/insertLines + " of lines in 1 second.");
+		
+		/* testing
+		ArrayList<Integer> aaa = new ArrayList<Integer>();
+		aaa = makeArray(20);
+		System.out.println(aaa);
+		System.out.println(quickSort(aaa, 0, aaa.size() - 1));
+		
+		*/
+
+	}
+	
+	/**
+	 * uses quick sort to sort an array
+	 * @param a - the array to sort
+	 * @param start - the index to start
+	 * @param end - the last index
+	 * @return - the sorted array
+	 */
+	public static ArrayList<Integer> quickSort(ArrayList<Integer> a, int start, int end)
+	{
+		 if (start < end) 
+	        {
+	            // pi is partitioning index, arr[pi] is now at right place 
+	            int pivotIndex = partition(a, start, end);
+	            quickSort(a, start, pivotIndex - 1);
+	            quickSort(a, pivotIndex + 1, end);
+	        }
+		 return a;
+	}
+	
+	/**
+	 * finds the index of pivot
+	 * @param a - the array to use
+	 * @param start - the starting index
+	 * @param end - the ending index
+	 * @return - the index of pivot
+	 */
+	public static int partition(ArrayList<Integer> a, int start, int end)
+	{
+
+		int i = start; //latest index that is less than pivot
+		//int size = end - start + 1;//start;
+		int pivot = a.get(end); // median of 3 or last element
+		//if i choose med of 3, then pivot will be be swapped with last element
+		for(int j = start; j < end; j++) // size - 1 so i deal with pivot myself
+		{
+			if(a.get(j) < pivot)
+			{
+				//i++;
+				//swap i and j
+				int temp = a.get(j);
+				a.set(j, a.get(i));
+				a.set(i, temp);
+				//iterate i
+				i++;
+			}
+		}
+		
+		//one last swap to put pivot in its place
+		int temp = a.get(end);
+		a.set(end, a.get(i));
+		a.set(i, temp);
+		//at this point you should have partitioned array
+	//	System.out.println("a: " +a);
+	//	System.out.println("i: " + i);
+		return i; //index of pivot is i
+	}
+	
+	public static ArrayList<Integer> insertionSort(ArrayList<Integer> a)
+	{
+		int n = a.size();
+		for (int i = 1; i < n; i++) //start at 1 b/c 0th card would be by itself
+		{
+			int current = a.get(i);
+			int j = i-1;
+
+
+			// more elements one at a time greater than key, to one position ahead 
+			while (j >= 0 && a.get(j) > current)
+			{
+				a.set(j+1, a.get(j)); //slides number up
+				j = j-1; //decrement j
+			}
+			a.set(j+1, current); //slide last number up or move nothing
+		}
+		return a;
+	}
+
+	public static ArrayList<Integer> makeArray(int n)
+	{
+		ArrayList a = new ArrayList<Integer>();
+		Random rng = new Random();
+		for(int i=0; i<n; i++)
+		{
+			a.add(rng.nextInt(14001) - 7000);
+		}
+		return a;
+	}
+
+}
